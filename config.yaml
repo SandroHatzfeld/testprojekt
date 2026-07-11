@@ -2,7 +2,7 @@ name: "Brettspiele-Tracker"
 version: "1.0.0"
 slug: "boardgame_tracker"
 description: "Brettspielabende tracken: Spiele, Spieler und Partien mit Punkten und Gewinnern erfassen"
-url: "https://github.com/SandroHatzfeld/testprojekt"
+url: "https://github.com/SandroHatzfeld/BoardgameTracker"
 arch:
   - amd64
   - aarch64

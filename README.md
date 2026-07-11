@@ -9,43 +9,21 @@ jedes Spiel ist anklickbar für seine Partien-Historie.
 
 - `server/` — Node.js/Express REST-API, Datenhaltung in MySQL
 - `client/` — React-Frontend (Vite)
-- `docker-compose.yml` — MySQL 8 als Docker-Container für den eigenen Server
 - `config.yaml` / `Dockerfile` (Repo-Root) — Home-Assistant-Add-on-Paket, siehe unten
 
-Die App unterstützt zwei Betriebsarten:
-1. **VPS/eigener Server**: MySQL per `docker-compose.yml`, App per `npm run dev`
-   (Entwicklung) oder als gebautes Single-Process-Backend (Produktion)
-2. **Home Assistant OS**: als Add-on, verbunden mit einer separat installierten
-   MariaDB-Instanz
+Die App läuft produktiv als **Home Assistant Add-on**, verbunden mit einer
+separat installierten MariaDB-Instanz (z.B. dem offiziellen „MariaDB"-Add-on).
+Für lokale Entwicklung/Tests läuft sie weiterhin ganz normal über `npm run dev`
+gegen eine beliebige MySQL-Instanz, konfiguriert per `.env`.
 
 Die Konfiguration (`server/src/config.js`) erkennt automatisch, in welcher
 Umgebung die App läuft: Existiert `/data/options.json` (Home-Assistant-Add-on),
 werden die Werte von dort gelesen; sonst wird `.env` verwendet.
 
-## MySQL starten
-
-Im Repo-Root eine `.env` anlegen (nicht eingecheckt):
-
-```
-DB_PASSWORD=<beliebiges_passwort>
-DB_ROOT_PASSWORD=<beliebiges_root_passwort>
-```
-
-Dann:
-
-```
-docker compose up -d
-```
-
-Das Schema (`server/db/schema.sql`) wird beim allerersten Start automatisch
-angewendet (leeres Volume). Bei einem bereits existierenden Volume muss das
-Schema ggf. manuell nachgezogen werden:
-
-```
-docker compose exec -T mysql mysql -uroot -p"$DB_ROOT_PASSWORD" boardgames < server/db/schema.sql
-```
-
 ## Backend starten
+
+Voraussetzung: eine erreichbare MySQL- oder MariaDB-Instanz (lokal installiert
+oder anderweitig gehostet) für die lokale Entwicklung.
 
 ```
 cd server
@@ -54,7 +32,8 @@ npm install
 npm run dev
 ```
 
-Läuft standardmäßig auf `http://localhost:3001`.
+Das Datenbankschema wird beim Start automatisch angewendet, kein manueller
+Schritt nötig. Läuft standardmäßig auf `http://localhost:3001`.
 
 ## Frontend starten
 
@@ -66,18 +45,6 @@ npm run dev
 
 Läuft standardmäßig auf `http://localhost:5173` und proxied `/api` an das
 Backend.
-
-## Produktion (VPS, ein einziger Prozess)
-
-```
-cd client && npm install && npm run build
-cd ../server && npm install && npm start
-```
-
-Wenn `client/dist` existiert, liefert der Express-Server die React-App
-automatisch selbst mit aus (inkl. clientseitigem Routing) — ein separater
-Vite-Dev-Server ist dann nicht mehr nötig. Erreichbar unter
-`http://localhost:3001` (bzw. dem konfigurierten `PORT`).
 
 ## Betrieb als Home-Assistant-Add-on
 
@@ -91,7 +58,7 @@ selbst in seinen Infos an.
 1. In Home Assistant: **Einstellungen → Add-ons → Add-on Store** (neuere
    Versionen: **Apps → App Store**) → Menü oben rechts → **Repositories**
 2. Dieses GitHub-Repo als URL hinzufügen:
-   `https://github.com/SandroHatzfeld/testprojekt`
+   `https://github.com/SandroHatzfeld/BoardgameTracker`
 3. „Brettspiele-Tracker" in der Liste suchen und installieren
 4. Im **Konfiguration**-Tab des Add-ons `db_host`, `db_port`, `db_user`,
    `db_password`, `db_name` passend zur MariaDB-Instanz eintragen
