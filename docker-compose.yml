@@ -1,0 +1,17 @@
+services:
+  mysql:
+    image: mysql:8
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: boardgames
+      MYSQL_USER: boardgames
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./server/db/schema.sql:/docker-entrypoint-initdb.d/schema.sql:ro
+
+volumes:
+  mysql_data:
