@@ -1,0 +1,29 @@
+name: "Brettspiele-Tracker"
+version: "1.0.0"
+slug: "boardgame_tracker"
+description: "Brettspielabende tracken: Spiele, Spieler und Partien mit Punkten und Gewinnern erfassen"
+url: "https://github.com/SandroHatzfeld/testprojekt"
+arch:
+  - amd64
+  - aarch64
+  - armv7
+init: false
+startup: application
+boot: auto
+ports:
+  3001/tcp: 3001
+ports_description:
+  3001/tcp: "Web-Oberfläche"
+webui: "http://[HOST]:[PORT:3001]"
+options:
+  db_host: "core-mariadb"
+  db_port: 3306
+  db_user: "boardgames"
+  db_password: ""
+  db_name: "boardgames"
+schema:
+  db_host: str
+  db_port: port
+  db_user: str
+  db_password: password
+  db_name: str
