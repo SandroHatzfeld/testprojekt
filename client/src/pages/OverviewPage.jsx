@@ -4,6 +4,11 @@ import { getJSON, putJSON, del } from '../api.js';
 import PlayForm from '../components/PlayForm.jsx';
 import IconButton from '../components/IconButton.jsx';
 
+function formatDate(isoString) {
+  const [year, month, day] = isoString.slice(0, 10).split('-');
+  return `${day}.${month}.${year.slice(2)}`;
+}
+
 function sortGames(games) {
   return [...games].sort((a, b) => {
     if (!a.last_played_at && !b.last_played_at) return a.name.localeCompare(b.name);
@@ -15,7 +20,7 @@ function sortGames(games) {
 
 function gameSubtitle(game) {
   if (game.play_count === 0) return 'Noch nicht gespielt';
-  const lastPlayed = game.last_played_at ? game.last_played_at.slice(0, 10) : null;
+  const lastPlayed = game.last_played_at ? formatDate(game.last_played_at) : null;
   return `${game.play_count} Partie${game.play_count === 1 ? '' : 'n'}${lastPlayed ? ` · zuletzt am ${lastPlayed}` : ''}`;
 }
 
@@ -133,7 +138,7 @@ export default function OverviewPage() {
                     ) : (
                       <div key={play.id} className="rounded-2xl bg-white p-3 shadow-sm">
                         <div className="mb-1 flex items-center justify-between">
-                          <strong className="text-brand-navy">{play.played_at.slice(0, 10)}</strong>
+                          <strong className="text-brand-navy">{formatDate(play.played_at)}</strong>
                           <div className="flex gap-1">
                             <IconButton label="Bearbeiten" onClick={() => setEditingPlayId(play.id)}>
                               <Pencil size={16} />

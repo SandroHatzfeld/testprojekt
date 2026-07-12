@@ -144,7 +144,6 @@ export default function GamesPage() {
           <thead>
             <tr className="bg-brand-navy text-white">
               <th className="px-3 py-2 font-semibold">Name</th>
-              <th className="px-3 py-2 font-semibold">Beschreibung</th>
               <th className="px-3 py-2"></th>
             </tr>
           </thead>
@@ -153,7 +152,7 @@ export default function GamesPage() {
               <tr key={game.id} className="border-t border-gray-100 align-top">
                 {editingId === game.id ? (
                   <>
-                    <td className="px-3 py-2" colSpan={2}>
+                    <td className="px-3 py-2">
                       <div className="flex flex-wrap gap-2">
                         <GameFields values={editGame} onChange={setEditGame} />
                       </div>
@@ -173,9 +172,9 @@ export default function GamesPage() {
                   <>
                     <td className="px-3 py-2">
                       <div className="font-medium text-brand-navy">{game.name}</div>
+                      {game.description && <div className="text-sm text-gray-600">{game.description}</div>}
                       <div className="text-xs text-gray-500">{gameSubtitle(game)}</div>
                     </td>
-                    <td className="px-3 py-2 text-gray-600">{game.description}</td>
                     <td className="px-3 py-2">
                       <div className="flex gap-1">
                         <IconButton label="Bearbeiten" onClick={() => startEdit(game)}>
@@ -192,7 +191,7 @@ export default function GamesPage() {
             ))}
             {games.length === 0 && (
               <tr>
-                <td colSpan={3} className="px-3 py-4 text-gray-500">
+                <td colSpan={2} className="px-3 py-4 text-gray-500">
                   Noch keine Spiele vorhanden.
                 </td>
               </tr>

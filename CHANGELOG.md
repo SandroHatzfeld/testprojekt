@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.3.1
+
+- Datumsanzeige jetzt als DD.MM.YY statt YYYY-MM-DD
+- Spiele-Liste: Beschreibung nicht mehr als eigene Spalte, steht jetzt
+  zwischen Spielname und den Attributen (Dauer/Komplexität/Partienzahl)
+- Vorschlag-Seite: Schnellfilter-Buttons für die Spieldauer (Kurz <30 Min,
+  Mittel 30–75 Min, Lang >75 Min)
+
 ## 1.3.0
 
 - "Neue Partie" jetzt über einen Floating-Action-Button (unten rechts) statt

@@ -8,6 +8,12 @@ const COMPLEXITY_OPTIONS = [
   { value: 'schwer', label: 'Schwer' },
 ];
 
+const DURATION_PRESETS = [
+  { key: 'kurz', label: 'Kurz (<30)', min: '', max: '29' },
+  { key: 'mittel', label: 'Mittel (30–75)', min: '30', max: '75' },
+  { key: 'lang', label: 'Lang (>75)', min: '76', max: '' },
+];
+
 const inputClass =
   'w-full rounded-lg border border-gray-300 px-2 py-1.5 text-sm focus:border-brand-orange focus:outline-none';
 const labelClass = 'mb-1 block text-xs font-medium text-gray-500';
@@ -42,6 +48,7 @@ export default function SuggestionPage() {
   const [error, setError] = useState(null);
   const [durationMin, setDurationMin] = useState('');
   const [durationMax, setDurationMax] = useState('');
+  const [activeDurationPreset, setActiveDurationPreset] = useState(null);
   const [complexitySet, setComplexitySet] = useState(() => new Set());
   const [playCountMin, setPlayCountMin] = useState('');
   const [playCountMax, setPlayCountMax] = useState('');
@@ -51,6 +58,23 @@ export default function SuggestionPage() {
   useEffect(() => {
     getJSON('/games').then(setGames).catch((err) => setError(err.message));
   }, []);
+
+  function applyDurationPreset(preset) {
+    if (activeDurationPreset === preset.key) {
+      setActiveDurationPreset(null);
+      setDurationMin('');
+      setDurationMax('');
+    } else {
+      setActiveDurationPreset(preset.key);
+      setDurationMin(preset.min);
+      setDurationMax(preset.max);
+    }
+  }
+
+  function handleManualDurationChange(setter, value) {
+    setActiveDurationPreset(null);
+    setter(value);
+  }
 
   function toggleComplexity(value) {
     setComplexitySet((prev) => {
@@ -85,13 +109,29 @@ export default function SuggestionPage() {
       <div className="mb-4 space-y-3 rounded-2xl bg-white p-4 shadow-sm">
         <div>
           <span className={labelClass}>Spieldauer (Min.)</span>
+          <div className="mb-2 flex gap-2">
+            {DURATION_PRESETS.map((preset) => (
+              <button
+                key={preset.key}
+                type="button"
+                onClick={() => applyDurationPreset(preset)}
+                className={`flex-1 rounded-lg px-3 py-1.5 text-sm font-medium ${
+                  activeDurationPreset === preset.key
+                    ? 'bg-brand-orange text-white'
+                    : 'bg-gray-100 text-brand-navy hover:bg-gray-200'
+                }`}
+              >
+                {preset.label}
+              </button>
+            ))}
+          </div>
           <div className="flex gap-2">
             <input
               type="number"
               min="0"
               placeholder="Von"
               value={durationMin}
-              onChange={(e) => setDurationMin(e.target.value)}
+              onChange={(e) => handleManualDurationChange(setDurationMin, e.target.value)}
               className={inputClass}
             />
             <input
@@ -99,7 +139,7 @@ export default function SuggestionPage() {
               min="0"
               placeholder="Bis"
               value={durationMax}
-              onChange={(e) => setDurationMax(e.target.value)}
+              onChange={(e) => handleManualDurationChange(setDurationMax, e.target.value)}
               className={inputClass}
             />
           </div>
