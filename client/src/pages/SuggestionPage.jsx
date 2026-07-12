@@ -9,9 +9,9 @@ const COMPLEXITY_OPTIONS = [
 ];
 
 const DURATION_PRESETS = [
-  { key: 'kurz', label: 'Kurz (<=30)', min: '', max: '30' },
+  { key: 'kurz', label: 'Kurz<br>(<=30)', min: '', max: '30' },
   { key: 'mittel', label: 'Mittel <br>(30–75)', min: '30', max: '75' },
-  { key: 'lang', label: 'Lang (>=75)', min: '75', max: '' },
+  { key: 'lang', label: 'Lang<br>(>=75)', min: '75', max: '' },
 ];
 
 const inputClass =
