@@ -14,15 +14,17 @@ function getBasename() {
 export default function App() {
   return (
     <BrowserRouter basename={getBasename()}>
-      <div className="app-shell">
+      <div className="min-h-screen bg-gray-50 pb-24">
+        <main className="mx-auto max-w-2xl px-4 py-6">
+          <Routes>
+            <Route path="/" element={<AddPlayPage />} />
+            <Route path="/uebersicht" element={<OverviewPage />} />
+            <Route path="/games" element={<GamesPage />} />
+            <Route path="/games/:id" element={<GameDetailPage />} />
+            <Route path="/players" element={<PlayersPage />} />
+          </Routes>
+        </main>
         <NavBar />
-        <Routes>
-          <Route path="/" element={<OverviewPage />} />
-          <Route path="/games" element={<GamesPage />} />
-          <Route path="/games/:id" element={<GameDetailPage />} />
-          <Route path="/players" element={<PlayersPage />} />
-          <Route path="/plays/new" element={<AddPlayPage />} />
-        </Routes>
       </div>
     </BrowserRouter>
   );

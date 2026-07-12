@@ -1,5 +1,5 @@
 name: "Brettspiele-Tracker"
-version: "1.1.0"
+version: "1.2.0"
 slug: "boardgame_tracker"
 description: "Brettspielabende tracken: Spiele, Spieler und Partien mit Punkten und Gewinnern erfassen"
 url: "https://github.com/SandroHatzfeld/BoardgameTracker"
