@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.3.2
+
+- Dauer-Schnellfilter überarbeitet: Kurz/Mittel/Lang sind jetzt lückenlos
+  und überschneidungsfrei (Kurz <30, Mittel 30–75 inklusive, Lang >75) —
+  Spiele mit genau 30 oder 75 Minuten fielen vorher durch alle drei Filter
+- Zeilenumbruch in den Filter-Buttons korrigiert (war zuvor als Text
+  "<br>" sichtbar statt als echter Umbruch)
+
 ## 1.3.1
 
 - Datumsanzeige jetzt als DD.MM.YY statt YYYY-MM-DD

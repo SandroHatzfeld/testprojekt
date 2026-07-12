@@ -8,10 +8,13 @@ const COMPLEXITY_OPTIONS = [
   { value: 'schwer', label: 'Schwer' },
 ];
 
+// min/max sind bewusst um 1 gegenüber den Anzeige-Grenzen verschoben, da filterGames()
+// unten min/max exklusiv vergleicht (<=/>=). Damit ergeben sich lückenlose, nicht
+// überlappende Bereiche: Kurz <30, Mittel 30–75 (beide inklusive), Lang >75.
 const DURATION_PRESETS = [
-  { key: 'kurz', label: 'Kurz<br>(<=30)', min: '', max: '30' },
-  { key: 'mittel', label: 'Mittel <br>(30–75)', min: '30', max: '75' },
-  { key: 'lang', label: 'Lang<br>(>=75)', min: '75', max: '' },
+  { key: 'kurz', label: 'Kurz', sublabel: '(<30)', min: '', max: '30' },
+  { key: 'mittel', label: 'Mittel', sublabel: '(30–75)', min: '29', max: '76' },
+  { key: 'lang', label: 'Lang', sublabel: '(>75)', min: '75', max: '' },
 ];
 
 const inputClass =
@@ -122,6 +125,8 @@ export default function SuggestionPage() {
                 }`}
               >
                 {preset.label}
+                <br />
+                {preset.sublabel}
               </button>
             ))}
           </div>
