@@ -9,7 +9,6 @@ import { runMigrations } from './migrate.js';
 import gamesRouter from './routes/games.js';
 import playersRouter from './routes/players.js';
 import playsRouter from './routes/plays.js';
-import leaderboardRouter from './routes/leaderboard.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const clientDistPath = path.resolve(__dirname, '../../client/dist');
@@ -21,7 +20,6 @@ app.use(express.json());
 app.use('/api/games', gamesRouter);
 app.use('/api/players', playersRouter);
 app.use('/api/plays', playsRouter);
-app.use('/api/leaderboard', leaderboardRouter);
 
 if (fs.existsSync(clientDistPath)) {
   const indexHtmlTemplate = fs.readFileSync(path.join(clientDistPath, 'index.html'), 'utf8');
@@ -39,6 +37,9 @@ if (fs.existsSync(clientDistPath)) {
 }
 
 app.use((err, req, res, next) => {
+  if (err.status === 400) {
+    return res.status(400).json({ error: err.message });
+  }
   if (err.code === 'ER_ROW_IS_REFERENCED_2' || err.code === 'ER_ROW_IS_REFERENCED') {
     return res.status(409).json({ error: 'Eintrag wird noch referenziert und kann nicht gelöscht werden.' });
   }

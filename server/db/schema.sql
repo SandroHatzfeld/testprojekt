@@ -5,11 +5,19 @@ CREATE TABLE IF NOT EXISTS players (
 ) ENGINE=InnoDB;
 
 CREATE TABLE IF NOT EXISTS games (
-  id          INT AUTO_INCREMENT PRIMARY KEY,
-  name        VARCHAR(150) NOT NULL UNIQUE,
-  description VARCHAR(500) NULL,
-  created_at  TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+  id               INT AUTO_INCREMENT PRIMARY KEY,
+  name             VARCHAR(150) NOT NULL UNIQUE,
+  description      VARCHAR(500) NULL,
+  duration_minutes INT NULL,
+  complexity       ENUM('leicht', 'mittel', 'schwer') NULL,
+  created_at       TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB;
+
+-- Idempotent, damit bereits existierende Installationen (schema.sql läuft bei jedem
+-- Start erneut) die neuen Spalten nachträglich bekommen; CREATE TABLE IF NOT EXISTS
+-- oben greift dafür nicht, da die Tabelle dort schon existiert.
+ALTER TABLE games ADD COLUMN IF NOT EXISTS duration_minutes INT NULL AFTER description;
+ALTER TABLE games ADD COLUMN IF NOT EXISTS complexity ENUM('leicht', 'mittel', 'schwer') NULL AFTER duration_minutes;
 
 CREATE TABLE IF NOT EXISTS plays (
   id         INT AUTO_INCREMENT PRIMARY KEY,

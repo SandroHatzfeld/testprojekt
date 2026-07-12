@@ -1,5 +1,22 @@
 # Changelog
 
+## 1.3.0
+
+- "Neue Partie" jetzt über einen Floating-Action-Button (unten rechts) statt
+  eigenem Tab erreichbar
+- Spiel- und Spielerauswahl beim Erfassen einer Partie als durchsuchbares
+  Auswahlfeld statt Dropdown
+- Gewinner wird beim Eintragen der Punkte automatisch anhand der höchsten
+  Punktzahl vorausgewählt, bleibt aber manuell überschreibbar
+- Übersicht komplett überarbeitet: Spiele mit Datum der letzten Partie,
+  ausklappbare Partien-Historie inkl. Bearbeiten/Löschen einzelner Partien
+  (ersetzt die bisherige Sieg-Rangliste und die separate Spiel-Detailseite)
+- Spiele haben jetzt Spieldauer und Komplexität (leicht/mittel/schwer),
+  außerdem wird die Anzahl der Partien pro Spiel angezeigt
+- Neue "Vorschlag"-Seite (zweiter Tab): Filter nach Dauer, Komplexität und
+  Partienzahl, dazu "Zufällig wählen" und "Wenig gespielt wählen"
+  (Spiele, die seit über einem Monat nicht gespielt wurden)
+
 ## 1.2.0
 
 - Neues UI-Design auf Basis von Tailwind CSS mit den druckf3ld-Markenfarben

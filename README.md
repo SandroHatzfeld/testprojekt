@@ -2,8 +2,10 @@
 
 Kleine App, um Brettspielabende zu tracken: wer hat wann was gespielt, mit
 welcher Punktzahl, wer hat gewonnen. Spiele- und Spielerlisten sind über die
-Weboberfläche pflegbar, eine Übersichtsseite zeigt die Siege pro Spieler, und
-jedes Spiel ist anklickbar für seine Partien-Historie.
+Weboberfläche pflegbar, die Übersicht zeigt pro Spiel das Datum der letzten
+Partie mit ausklappbarer Partien-Historie, und eine Vorschlag-Seite hilft bei
+der Auswahl des nächsten Spiels (Filter nach Dauer/Komplexität/Partienzahl,
+plus Zufallsauswahl).
 
 ## Architektur
 

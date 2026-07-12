@@ -3,9 +3,40 @@ import { pool } from '../db.js';
 
 const router = Router();
 
+const VALID_COMPLEXITIES = ['leicht', 'mittel', 'schwer'];
+
+function normalizeComplexity(value) {
+  if (value === undefined || value === null || value === '') return null;
+  if (!VALID_COMPLEXITIES.includes(value)) {
+    const err = new Error(`Ungültige Komplexität. Erlaubt: ${VALID_COMPLEXITIES.join(', ')}.`);
+    err.status = 400;
+    throw err;
+  }
+  return value;
+}
+
+function normalizeDuration(value) {
+  if (value === undefined || value === null || value === '') return null;
+  const num = Number(value);
+  if (!Number.isFinite(num)) {
+    const err = new Error('Spieldauer muss eine Zahl sein.');
+    err.status = 400;
+    throw err;
+  }
+  return num;
+}
+
 router.get('/', async (req, res, next) => {
   try {
-    const [rows] = await pool.query('SELECT * FROM games ORDER BY name ASC');
+    const [rows] = await pool.query(
+      `SELECT g.id, g.name, g.description, g.duration_minutes, g.complexity, g.created_at,
+              COUNT(pl.id) AS play_count,
+              MAX(pl.played_at) AS last_played_at
+       FROM games g
+       LEFT JOIN plays pl ON pl.game_id = g.id
+       GROUP BY g.id, g.name, g.description, g.duration_minutes, g.complexity, g.created_at
+       ORDER BY g.name ASC`
+    );
     res.json(rows);
   } catch (err) {
     next(err);
@@ -15,9 +46,11 @@ router.get('/', async (req, res, next) => {
 router.post('/', async (req, res, next) => {
   try {
     const { name, description } = req.body;
+    const duration_minutes = normalizeDuration(req.body.duration_minutes);
+    const complexity = normalizeComplexity(req.body.complexity);
     const [result] = await pool.query(
-      'INSERT INTO games (name, description) VALUES (?, ?)',
-      [name, description ?? null]
+      'INSERT INTO games (name, description, duration_minutes, complexity) VALUES (?, ?, ?, ?)',
+      [name, description ?? null, duration_minutes, complexity]
     );
     const [rows] = await pool.query('SELECT * FROM games WHERE id = ?', [result.insertId]);
     res.status(201).json(rows[0]);
@@ -39,9 +72,11 @@ router.get('/:id', async (req, res, next) => {
 router.put('/:id', async (req, res, next) => {
   try {
     const { name, description } = req.body;
+    const duration_minutes = normalizeDuration(req.body.duration_minutes);
+    const complexity = normalizeComplexity(req.body.complexity);
     await pool.query(
-      'UPDATE games SET name = ?, description = ? WHERE id = ?',
-      [name, description ?? null, req.params.id]
+      'UPDATE games SET name = ?, description = ?, duration_minutes = ?, complexity = ? WHERE id = ?',
+      [name, description ?? null, duration_minutes, complexity, req.params.id]
     );
     const [rows] = await pool.query('SELECT * FROM games WHERE id = ?', [req.params.id]);
     if (rows.length === 0) return res.status(404).json({ error: 'Spiel nicht gefunden.' });
