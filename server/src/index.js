@@ -24,10 +24,17 @@ app.use('/api/plays', playsRouter);
 app.use('/api/leaderboard', leaderboardRouter);
 
 if (fs.existsSync(clientDistPath)) {
-  app.use(express.static(clientDistPath));
+  const indexHtmlTemplate = fs.readFileSync(path.join(clientDistPath, 'index.html'), 'utf8');
+  const ingressPathPattern = /^\/[A-Za-z0-9/_-]*$/;
+
+  app.use(express.static(clientDistPath, { index: false }));
   app.get('*', (req, res, next) => {
     if (req.path.startsWith('/api')) return next();
-    res.sendFile(path.join(clientDistPath, 'index.html'));
+    const rawIngressPath = req.get('X-Ingress-Path');
+    const basePath = rawIngressPath && ingressPathPattern.test(rawIngressPath) ? rawIngressPath : '';
+    const html = indexHtmlTemplate.replace(/<base href="\/"\s*\/?>/, `<base href="${basePath}/">`);
+    res.set('Cache-Control', 'no-store');
+    res.type('html').send(html);
   });
 }
 

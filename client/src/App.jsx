@@ -6,9 +6,14 @@ import GameDetailPage from './pages/GameDetailPage.jsx';
 import PlayersPage from './pages/PlayersPage.jsx';
 import AddPlayPage from './pages/AddPlayPage.jsx';
 
+function getBasename() {
+  const pathname = new URL(document.baseURI).pathname;
+  return pathname === '/' ? '/' : pathname.replace(/\/$/, '');
+}
+
 export default function App() {
   return (
-    <BrowserRouter>
+    <BrowserRouter basename={getBasename()}>
       <div className="app-shell">
         <NavBar />
         <Routes>

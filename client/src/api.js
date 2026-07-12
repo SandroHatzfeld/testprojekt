@@ -8,11 +8,11 @@ async function handleResponse(res) {
 }
 
 export function getJSON(path) {
-  return fetch(`/api${path}`).then(handleResponse);
+  return fetch(`api${path}`).then(handleResponse);
 }
 
 export function postJSON(path, body) {
-  return fetch(`/api${path}`, {
+  return fetch(`api${path}`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(body),
@@ -20,7 +20,7 @@ export function postJSON(path, body) {
 }
 
 export function putJSON(path, body) {
-  return fetch(`/api${path}`, {
+  return fetch(`api${path}`, {
     method: 'PUT',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(body),
@@ -28,5 +28,5 @@ export function putJSON(path, body) {
 }
 
 export function del(path) {
-  return fetch(`/api${path}`, { method: 'DELETE' }).then(handleResponse);
+  return fetch(`api${path}`, { method: 'DELETE' }).then(handleResponse);
 }

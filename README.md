@@ -75,13 +75,20 @@ databases:
    oben im MariaDB-Add-on angelegt wurde
 5. Add-on starten — das Datenbankschema wird beim Start automatisch angelegt,
    kein manueller Schritt nötig
-6. Über den Button **„OPEN WEB UI"** bzw. `http://homeassistant.local:3001`
-   öffnen (Port ggf. im **Info**-Tab des Add-ons anpassen)
+6. Die App erscheint danach als eigenes Panel in der Home-Assistant-Sidebar
+   (Würfel-Icon) — kein separater Port, kein „OPEN WEB UI"-Button nötig
 
-Die App läuft dabei als ein einzelner Container ohne HA-Ingress, d.h. sie ist
-über einen festen Port erreichbar statt über die HA-Oberfläche eingebettet zu
-sein — für eine kleine App im Heimnetz ausreichend und deutlich einfacher als
-eine Ingress-Integration.
+Die App läuft über **HA-Ingress** eingebettet in die Home-Assistant-Oberfläche,
+nicht über einen offenen Port. Das funktioniert sowohl lokal im Heimnetz als
+auch remote (z.B. über Nabu Casa), weil der Zugriff über dieselbe
+authentifizierte Verbindung läuft wie Home Assistant selbst — anders als bei
+einem festen Port, den z.B. Nabu Casa nicht weiterleitet. Nebeneffekt: Die App
+ist nicht mehr unauthentifiziert im lokalen Netzwerk erreichbar, sondern nur
+für eingeloggte HA-Nutzer.
+
+Standardmäßig sehen nur **Admin-Nutzer** das Add-on in der Sidebar. Damit auch
+andere Haushaltsmitglieder Zugriff haben, in `config.yaml` `panel_admin: false`
+setzen.
 
 ### Fehlerbehebung
 
