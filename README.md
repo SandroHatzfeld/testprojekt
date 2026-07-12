@@ -48,6 +48,11 @@ Backend.
 
 ## Betrieb als Home-Assistant-Add-on
 
+**Für Mitwirkende:** Bei jeder Änderung, die das Add-on betrifft (`config.yaml`,
+`Dockerfile`, `server/`, `client/`), muss `version` in `config.yaml` erhöht
+werden. Home Assistant erkennt ein Update nur über eine geänderte Versionsnummer
+— ohne Bump zeigt der Add-on Store keine verfügbare Aktualisierung an.
+
 Voraussetzung: eine MariaDB-Instanz auf demselben HAOS-Gerät, z.B. das
 offizielle **„MariaDB"**-Add-on (falls noch nicht installiert: im Add-on
 Store bzw. „App Store" suchen und installieren). Der interne Hostname dieses
