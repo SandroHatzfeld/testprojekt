@@ -9,9 +9,9 @@ const COMPLEXITY_OPTIONS = [
 ];
 
 const DURATION_PRESETS = [
-  { key: 'kurz', label: 'Kurz (<30)', min: '', max: '29' },
-  { key: 'mittel', label: 'Mittel (30–75)', min: '30', max: '75' },
-  { key: 'lang', label: 'Lang (>75)', min: '76', max: '' },
+  { key: 'kurz', label: 'Kurz (<=30)', min: '', max: '30' },
+  { key: 'mittel', label: 'Mittel <br>(30–75)', min: '30', max: '75' },
+  { key: 'lang', label: 'Lang (>=75)', min: '75', max: '' },
 ];
 
 const inputClass =
@@ -20,8 +20,8 @@ const labelClass = 'mb-1 block text-xs font-medium text-gray-500';
 
 function filterGames(games, { durationMin, durationMax, complexitySet, playCountMin, playCountMax }) {
   return games.filter((g) => {
-    if (durationMin !== '' && (g.duration_minutes == null || g.duration_minutes < Number(durationMin))) return false;
-    if (durationMax !== '' && (g.duration_minutes == null || g.duration_minutes > Number(durationMax))) return false;
+    if (durationMin !== '' && (g.duration_minutes == null || g.duration_minutes <= Number(durationMin))) return false;
+    if (durationMax !== '' && (g.duration_minutes == null || g.duration_minutes >= Number(durationMax))) return false;
     if (complexitySet.size > 0 && (!g.complexity || !complexitySet.has(g.complexity))) return false;
     if (playCountMin !== '' && g.play_count < Number(playCountMin)) return false;
     if (playCountMax !== '' && g.play_count > Number(playCountMax)) return false;
