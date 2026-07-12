@@ -50,10 +50,20 @@ Backend.
 
 Voraussetzung: eine MariaDB-Instanz auf demselben HAOS-Gerät, z.B. das
 offizielle **„MariaDB"**-Add-on (falls noch nicht installiert: im Add-on
-Store bzw. „App Store" suchen und installieren, dort eine Datenbank/einen
-Nutzer anlegen). Der interne Hostname dieses Add-ons für andere Add-ons ist
-in der Regel `core-mariadb` — den genauen Namen zeigt das MariaDB-Add-on
-selbst in seinen Infos an.
+Store bzw. „App Store" suchen und installieren). Der interne Hostname dieses
+Add-ons für andere Add-ons ist in der Regel `core-mariadb` — den genauen
+Namen zeigt das MariaDB-Add-on selbst in seinen Infos an.
+
+**Wichtig:** Das MariaDB-Add-on legt Datenbank und Nutzer nicht automatisch
+an. Im **Konfiguration**-Tab des MariaDB-Add-ons muss unter `databases` ein
+Eintrag angelegt werden, z.B.:
+
+```yaml
+databases:
+  - database: boardgames
+    username: boardgames
+    password: <ein_passwort_deiner_wahl>
+```
 
 1. In Home Assistant: **Einstellungen → Add-ons → Add-on Store** (neuere
    Versionen: **Apps → App Store**) → Menü oben rechts → **Repositories**
@@ -61,7 +71,8 @@ selbst in seinen Infos an.
    `https://github.com/SandroHatzfeld/BoardgameTracker`
 3. „Brettspiele-Tracker" in der Liste suchen und installieren
 4. Im **Konfiguration**-Tab des Add-ons `db_host`, `db_port`, `db_user`,
-   `db_password`, `db_name` passend zur MariaDB-Instanz eintragen
+   `db_password`, `db_name` eintragen — **exakt passend** zu dem Eintrag, der
+   oben im MariaDB-Add-on angelegt wurde
 5. Add-on starten — das Datenbankschema wird beim Start automatisch angelegt,
    kein manueller Schritt nötig
 6. Über den Button **„OPEN WEB UI"** bzw. `http://homeassistant.local:3001`
@@ -71,3 +82,19 @@ Die App läuft dabei als ein einzelner Container ohne HA-Ingress, d.h. sie ist
 über einen festen Port erreichbar statt über die HA-Oberfläche eingebettet zu
 sein — für eine kleine App im Heimnetz ausreichend und deutlich einfacher als
 eine Ingress-Integration.
+
+### Fehlerbehebung
+
+Fehler erscheinen im **Log**-Tab des Add-ons.
+
+- **`ETIMEDOUT` / `ECONNREFUSED` / `ENOTFOUND`**: Die App kommt nicht bis zur
+  Datenbank durch. Prüfe, ob `db_host`/`db_port` korrekt sind und das
+  MariaDB-Add-on läuft.
+- **`Access denied for user ... (using password: YES)`**
+  (`ER_ACCESS_DENIED_ERROR`): Die Verbindung klappt, aber Login schlägt fehl.
+  Häufigste Ursache: Der Nutzer wurde im MariaDB-Add-on nicht unter
+  `databases` angelegt, oder `db_password` im Brettspiele-Tracker-Add-on
+  stimmt nicht mit dem dort gesetzten Passwort überein.
+- **`Unknown database` / `ER_BAD_DB_ERROR`**: `db_name` verweist auf eine
+  Datenbank, die im MariaDB-Add-on noch nicht existiert — ebenfalls über
+  `databases` dort anlegen.
